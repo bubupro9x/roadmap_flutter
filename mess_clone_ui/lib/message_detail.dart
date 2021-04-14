@@ -14,6 +14,7 @@ class NameDetails extends StatefulWidget {
 class _NameDetailsState extends State<NameDetails> {
   MessageModel model;
   bool isUserTyping = false;
+  TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _NameDetailsState extends State<NameDetails> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 _buildHeader(),
-                Expanded(child: Container()),
+                _buildListChat(),
                 _buildBottom(),
               ],
             ),
@@ -56,16 +57,58 @@ class _NameDetailsState extends State<NameDetails> {
         children: [
           if (!isUserTyping) _buildTools(),
           _buildInput(),
-          SizedBox(width: 8),
           _buildSend(),
         ],
       ),
     );
   }
 
+  _buildListChat() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.separated(
+          separatorBuilder: (_, __) => SizedBox(
+            height: 8,
+          ),
+          shrinkWrap: true,
+          reverse: true,
+          itemBuilder: (_, index) {
+            return _itemChat(
+              text: model.comment[index].toString(),
+            );
+          },
+          itemCount: model.comment.length,
+        ),
+      ),
+    );
+  }
+
+  _itemChat({String text, bool mine = true}) {
+    return Row(
+      children: [
+        if (mine) Expanded(child: SizedBox()),
+        Container(
+          decoration: BoxDecoration(
+              color: mine ? Colors.blueAccent : Colors.grey[500],
+              borderRadius: BorderRadius.circular(20)),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
   _buildSend() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        model.comment.insert(0, _controller.text);
+        _controller.text = '';
+        setState(() {});
+      },
       child: Icon(
         Icons.send,
         color: Colors.blueAccent,
@@ -83,6 +126,7 @@ class _NameDetailsState extends State<NameDetails> {
           borderRadius: BorderRadius.circular(15),
         ),
         child: TextField(
+          controller: _controller,
           onTap: () {
             setState(() {
               isUserTyping = true;
