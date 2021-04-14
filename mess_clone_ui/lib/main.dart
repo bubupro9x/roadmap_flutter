@@ -20,14 +20,13 @@ void printOrderMessage() async {
 Future<String> fetchUserOrder(String text) async {
   return Future.value(text);
 }
+
 void countSeconds(int s) async {
   print('Start count'); //line 1 (Dong bo)
   print("Start count $s"); // line 2 (Dong bo)
   var order = await fetchUserOrder('bus'); //queue1 (Bat dong bo)
   print('Your order $s is: $order'); //queue1 (Bat dong bo)
 }
-
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -104,7 +103,7 @@ class _MessengerPageState extends State<MessengerPage> {
                 'https://cdn.baogiaothong.vn/upload/images/2021-1/article_img/2021-03-30/img-bgt-2021-ngoc-trinh-a-1617122674-width620height620.jpg'),
         hasStory: true,
         isActive: true,
-        comment: ["Làm người yêu em nhé"],
+        comment: [MessageInfo(text: "Làm người yêu em nhé.")],
         time: '5m'));
 
     messagesModel.add(MessageModel(
@@ -114,116 +113,9 @@ class _MessengerPageState extends State<MessengerPage> {
                 'https://readtoolead.com/wp-content/uploads/2018/06/stevejobs.jpg'),
         hasStory: false,
         isActive: false,
-        comment: ["Anh trả chú 500k \$\. Về làm cho anh nhé."],
+        comment: [MessageInfo(text: "Anh trả chú 500k \$\. Về làm cho anh nhé.")],
         time: '15m'));
 
-    messagesModel.add(MessageModel(
-        user: UserModel(
-            name: 'Elon Musk',
-            avatar:
-                'https://static.doanhnhan.vn/images/upload/ngocdiem/03012021/451.jpg'),
-        hasStory: false,
-        isActive: false,
-        comment: ["Allin DOGE nhé, Anh sắp vào 5 tỷ coin"],
-        time: '1m'));
-
-    messagesModel.add(MessageModel(
-        user: UserModel(
-            name: 'Người yêu cũ',
-            avatar:
-                'https://photo-cms-plo.zadn.vn/Uploaded/2021/vrwqlqdwp/2021_03_02/ninh-duong-lan-ngoc-clip-nong_mcan.jpg'),
-        hasStory: true,
-        isActive: false,
-        comment: ["Mình làm lại từ đầu nhé"],
-        time: '1m'));
-
-    messagesModel.add(MessageModel(
-        user: UserModel(
-            name: 'Min-e',
-            avatar:
-                'https://static2.yan.vn/YanNews/2167221/201905/tieu-su-su-nghiep-va-cuoc-doi-cua-ca-si-min-f0ea35dc.jpg'),
-        hasStory: true,
-        isActive: false,
-        comment: ["Mình có thể trên tình yêu nhưng dưới tình bạn không?"],
-        time: '1h'));
-
-    messagesModel.add(MessageModel(
-        user: UserModel(
-            name: 'Lupin',
-            avatar:
-                'https://www.ramascreen.com/wp-content/uploads/2020/09/Omar-Sy-Lupin-e1601037251868.jpg'),
-        hasStory: false,
-        isActive: false,
-        comment: ["Anh dấu 5 tỷ dưới hiên nhà."],
-        time: '1h'));
-
-    // messagesModel.add(MessageModel(
-    //     user: UserModel(
-    //         name: 'Người yêu',
-    //         avatar:
-    //             'https://media-cdn.laodong.vn/Storage/NewsPortal/2021/1/21/872871/Photo-1-160188900296-02.jpg'),
-    //     hasStory: false,
-    //     isActive: false,
-    //     comment: "Anh đừng làm dev nữa. Về bố em cho 100 tỷ",
-    //     time: '11h'));
-    // messagesModel.add(MessageModel(
-    //     user: UserModel(
-    //         name: 'Min-e',
-    //         avatar:
-    //             'https://static2.yan.vn/YanNews/2167221/201905/tieu-su-su-nghiep-va-cuoc-doi-cua-ca-si-min-f0ea35dc.jpg'),
-    //     hasStory: true,
-    //     isActive: false,
-    //     comment: "Mình có thể trên tình yêu nhưng dưới tình bạn không?",
-    //     time: '1h'));
-    //
-    // messagesModel.add(MessageModel(
-    //     user: UserModel(
-    //         name: 'Lupin',
-    //         avatar:
-    //             'https://www.ramascreen.com/wp-content/uploads/2020/09/Omar-Sy-Lupin-e1601037251868.jpg'),
-    //     hasStory: false,
-    //     isActive: false,
-    //     comment: "Anh dấu 5 tỷ dưới hiên nhà.",
-    //     time: '1h'));
-    //
-    // messagesModel.add(MessageModel(
-    //     user: UserModel(
-    //         name: 'Người yêu',
-    //         avatar:
-    //             'https://media-cdn.laodong.vn/Storage/NewsPortal/2021/1/21/872871/Photo-1-160188900296-02.jpg'),
-    //     hasStory: false,
-    //     isActive: false,
-    //     comment: "Anh đừng làm dev nữa. Về bố em cho 100 tỷ",
-    //     time: '11h'));
-    // messagesModel.add(MessageModel(
-    //     user: UserModel(
-    //         name: 'Min-e',
-    //         avatar:
-    //             'https://static2.yan.vn/YanNews/2167221/201905/tieu-su-su-nghiep-va-cuoc-doi-cua-ca-si-min-f0ea35dc.jpg'),
-    //     hasStory: true,
-    //     isActive: false,
-    //     comment: "Mình có thể trên tình yêu nhưng dưới tình bạn không?",
-    //     time: '1h'));
-    //
-    // messagesModel.add(MessageModel(
-    //     user: UserModel(
-    //         name: 'Lupin',
-    //         avatar:
-    //             'https://www.ramascreen.com/wp-content/uploads/2020/09/Omar-Sy-Lupin-e1601037251868.jpg'),
-    //     hasStory: false,
-    //     isActive: false,
-    //     comment: "Anh dấu 5 tỷ dưới hiên nhà.",
-    //     time: '1h'));
-    //
-    // messagesModel.add(MessageModel(
-    //     user: UserModel(
-    //         name: 'Người yêu',
-    //         avatar:
-    //             'https://media-cdn.laodong.vn/Storage/NewsPortal/2021/1/21/872871/Photo-1-160188900296-02.jpg'),
-    //     hasStory: false,
-    //     isActive: false,
-    //     comment: "Anh đừng làm dev nữa. Về bố em cho 100 tỷ",
-    //     time: '11h'));
     super.initState();
   }
 
@@ -332,7 +224,7 @@ class _MessengerPageState extends State<MessengerPage> {
                     children: [
                       Flexible(
                         child: Text(
-                          model.comment.last,
+                          model.comment.last.text,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),
@@ -586,7 +478,7 @@ class _MessengerPageState extends State<MessengerPage> {
 
 class MessageModel {
   final UserModel user;
-  final List<String> comment;
+  final List<MessageInfo> comment;
   final bool isActive;
   final bool hasStory;
   final String time;
@@ -598,6 +490,11 @@ class MessageModel {
     this.hasStory,
     this.time,
   });
+}
+class MessageInfo{
+  String text;
+  bool isMine;
+  MessageInfo({this.text,this.isMine = true});
 }
 
 class UserModel {

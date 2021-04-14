@@ -57,6 +57,9 @@ class _NameDetailsState extends State<NameDetails> {
         children: [
           if (!isUserTyping) _buildTools(),
           _buildInput(),
+          SizedBox(
+            width: 6,
+          ),
           _buildSend(),
         ],
       ),
@@ -75,8 +78,8 @@ class _NameDetailsState extends State<NameDetails> {
           reverse: true,
           itemBuilder: (_, index) {
             return _itemChat(
-              text: model.comment[index].toString(),
-            );
+                text: model.comment[index].text.toString(),
+                mine: model.comment[index].isMine);
           },
           itemCount: model.comment.length,
         ),
@@ -105,7 +108,11 @@ class _NameDetailsState extends State<NameDetails> {
   _buildSend() {
     return GestureDetector(
       onTap: () {
-        model.comment.insert(0, _controller.text);
+        model.comment.insert(
+            0,
+            MessageInfo(
+              text: _controller.text,
+            ));
         _controller.text = '';
         setState(() {});
       },
