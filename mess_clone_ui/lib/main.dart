@@ -38,6 +38,8 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MessengerPage(title: 'Flutter Demo Home Page'),
+      // home: DisplayDog(),
+
       onGenerateRoute: (settings) {
         if (settings.name == '/nameDetails') {
           MessageModel name = settings.arguments;
@@ -113,7 +115,9 @@ class _MessengerPageState extends State<MessengerPage> {
                 'https://readtoolead.com/wp-content/uploads/2018/06/stevejobs.jpg'),
         hasStory: false,
         isActive: false,
-        comment: [MessageInfo(text: "Anh trả chú 500k \$\. Về làm cho anh nhé.")],
+        comment: [
+          MessageInfo(text: "Anh trả chú 500k \$\. Về làm cho anh nhé.")
+        ],
         time: '15m'));
 
     super.initState();
@@ -491,10 +495,12 @@ class MessageModel {
     this.time,
   });
 }
-class MessageInfo{
+
+class MessageInfo {
   String text;
   bool isMine;
-  MessageInfo({this.text,this.isMine = true});
+
+  MessageInfo({this.text, this.isMine = true});
 }
 
 class UserModel {

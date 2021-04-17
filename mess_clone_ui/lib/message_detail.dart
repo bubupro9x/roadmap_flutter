@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 import 'main.dart';
 
@@ -105,15 +109,40 @@ class _NameDetailsState extends State<NameDetails> {
     );
   }
 
+  Future<String> _fetchMessage({String text}) async {
+    Response response = await http.post('https://wsapi.simsimi.com/190410/talk',
+        headers: {
+          "x-api-key": 'mWdCACNk9_UNrM2IN~eEATGVyBCEWMM6Y3r.WQ9c',
+          'Content-type': 'application/json'
+        },
+        body: json.encode({"utext": text, "lang": "vn"}));
+
+    print('response: ${response.body}');
+    AMessageModel model = aMessageModelFromJson(response.body);
+    return Future.value(model.atext);
+  }
+
   _buildSend() {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        final text = _controller.text; // text = Ahihi
         model.comment.insert(
             0,
             MessageInfo(
               text: _controller.text,
             ));
         _controller.text = '';
+        setState(() {});
+        model.comment.insert(
+            0,
+            MessageInfo(
+              text: "Nó đang typing...",
+              isMine: false,
+            ));
+        setState(() {});
+        final aText =
+            await _fetchMessage(text: text); //aText co ket qua tra ve cua api
+        model.comment.first.text = aText;
         setState(() {});
       },
       child: Icon(
@@ -225,4 +254,67 @@ class _NameDetailsState extends State<NameDetails> {
       ),
     );
   }
+}
+
+// To parse this JSON data, do
+//
+//     final aMessageModel = aMessageModelFromJson(jsonString);
+
+AMessageModel aMessageModelFromJson(String str) =>
+    AMessageModel.fromJson(json.decode(str));
+
+String aMessageModelToJson(AMessageModel data) => json.encode(data.toJson());
+
+class AMessageModel {
+  AMessageModel({
+    this.status,
+    this.statusMessage,
+    this.request,
+    this.atext,
+    this.lang,
+  });
+
+  int status;
+  String statusMessage;
+  Request request;
+  String atext;
+  String lang;
+
+  factory AMessageModel.fromJson(Map<String, dynamic> json) => AMessageModel(
+        status: json["status"] == null ? null : json["status"],
+        statusMessage:
+            json["statusMessage"] == null ? null : json["statusMessage"],
+        request:
+            json["request"] == null ? null : Request.fromJson(json["request"]),
+        atext: json["atext"] == null ? null : json["atext"],
+        lang: json["lang"] == null ? null : json["lang"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status == null ? null : status,
+        "statusMessage": statusMessage == null ? null : statusMessage,
+        "request": request == null ? null : request.toJson(),
+        "atext": atext == null ? null : atext,
+        "lang": lang == null ? null : lang,
+      };
+}
+
+class Request {
+  Request({
+    this.utext,
+    this.lang,
+  });
+
+  String utext;
+  String lang;
+
+  factory Request.fromJson(Map<String, dynamic> json) => Request(
+        utext: json["utext"] == null ? null : json["utext"],
+        lang: json["lang"] == null ? null : json["lang"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "utext": utext == null ? null : utext,
+        "lang": lang == null ? null : lang,
+      };
 }
