@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc_provider/bloc_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'chat_bloc.dart';
@@ -74,41 +75,75 @@ class _ChatDetailState extends State<ChatDetail> {
   }
 
   _buildListChat() {
+    // DateTime.now().millisecondsSinceEpoch;
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
-          separatorBuilder: (_, __) => SizedBox(
-            height: 8,
-          ),
-          shrinkWrap: true,
-          reverse: true,
-          itemBuilder: (_, index) {
-            return _itemChat(
-                text: model.comment[index].text.toString(),
-                mine: model.comment[index].isMine);
-          },
-          itemCount: model.comment.length,
-        ),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: _bloc.firestore
+                .collection('chat')
+                .orderBy('time', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return SizedBox();
+              return ListView.separated(
+                separatorBuilder: (_, __) => SizedBox(
+                  height: 8,
+                ),
+                shrinkWrap: true,
+                reverse: true,
+                itemBuilder: (_, index) {
+                  return _itemChat(
+                      text: snapshot.data.docs[index].data()['message']
+                          ['comment'],
+                      name: snapshot.data.docs[index].data()['message']
+                          ['name']);
+                },
+                itemCount: snapshot.data.docs.length,
+              );
+            }),
       ),
     );
   }
 
-  _itemChat({String text, bool mine = true}) {
-    return Row(
-      children: [
-        if (mine) Expanded(child: SizedBox()),
-        Container(
-          decoration: BoxDecoration(
-              color: mine ? Colors.blueAccent : Colors.grey[500],
-              borderRadius: BorderRadius.circular(20)),
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          child: Text(
-            text,
-            style: TextStyle(color: Colors.white),
+  _itemChat({String text, String name}) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: name == _bloc.name
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
+        children: [
+          Text(name),
+          SizedBox(
+            height: 4,
           ),
-        ),
-      ],
+          Container(
+            width: 300,
+            child: Row(
+              mainAxisAlignment: name == _bloc.name
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
+              children: [
+                if (name == _bloc.name) Expanded(child: SizedBox()),
+                Flexible(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: name == _bloc.name
+                            ? Colors.blueAccent
+                            : Colors.grey[500],
+                        borderRadius: BorderRadius.circular(20)),
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    child: Text(
+                      text ?? "",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -116,19 +151,8 @@ class _ChatDetailState extends State<ChatDetail> {
     return GestureDetector(
       onTap: () async {
         final text = _controller.text; // text = Ahihi
-        model.comment.insert(
-            0,
-            MessageInfo(
-              text: _controller.text,
-            ));
+        _bloc.sendData(comment: text);
         _controller.text = '';
-        setState(() {});
-        model.comment.insert(
-            0,
-            MessageInfo(
-              text: "Nó đang typing...",
-              isMine: false,
-            ));
         setState(() {});
       },
       child: Icon(
