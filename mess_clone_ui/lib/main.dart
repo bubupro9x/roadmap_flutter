@@ -1,31 +1,20 @@
+import 'package:bloc_provider/bloc_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mess_clone_ui/second_page.dart';
 
+import 'chat_bloc.dart';
 import 'first_page.dart';
 import 'message_detail.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(MyApp());
-}
-
-void printOrderMessage() async {
-  print('Awaiting user order...'); // line 3 (Dong bo)
-  var order = await fetchUserOrder('pen'); //queue2 (Bat dong bo)
-  print('Your order is: $order'); //queue2 (Bat dong bo)
-}
-
-Future<String> fetchUserOrder(String text) async {
-  return Future.value(text);
-}
-
-void countSeconds(int s) async {
-  print('Start count'); //line 1 (Dong bo)
-  print("Start count $s"); // line 2 (Dong bo)
-  var order = await fetchUserOrder('bus'); //queue1 (Bat dong bo)
-  print('Your order $s is: $order'); //queue1 (Bat dong bo)
 }
 
 class MyApp extends StatelessWidget {
@@ -45,8 +34,11 @@ class MyApp extends StatelessWidget {
           MessageModel name = settings.arguments;
           return MaterialPageRoute(
             builder: (context) {
-              return NameDetails(
-                model: name,
+              return BlocProvider<ChatBloc>(
+                creator: (_, __) => ChatBloc(),
+                child: ChatDetail(
+                  model: name,
+                ),
               );
             },
           );
@@ -100,25 +92,13 @@ class _MessengerPageState extends State<MessengerPage> {
 
     messagesModel.add(MessageModel(
         user: UserModel(
-            name: 'Brian',
+            name: 'Flutter TechMaster',
             avatar:
                 'https://cdn.baogiaothong.vn/upload/images/2021-1/article_img/2021-03-30/img-bgt-2021-ngoc-trinh-a-1617122674-width620height620.jpg'),
         hasStory: true,
         isActive: true,
-        comment: [MessageInfo(text: "Làm người yêu em nhé.")],
+        comment: [],
         time: '5m'));
-
-    messagesModel.add(MessageModel(
-        user: UserModel(
-            name: 'Steve Job',
-            avatar:
-                'https://readtoolead.com/wp-content/uploads/2018/06/stevejobs.jpg'),
-        hasStory: false,
-        isActive: false,
-        comment: [
-          MessageInfo(text: "Anh trả chú 500k \$\. Về làm cho anh nhé.")
-        ],
-        time: '15m'));
 
     super.initState();
   }
@@ -226,13 +206,14 @@ class _MessengerPageState extends State<MessengerPage> {
                   ),
                   Row(
                     children: [
-                      Flexible(
-                        child: Text(
-                          model.comment.last.text,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12),
+                      if (model.comment.length > 0)
+                        Flexible(
+                          child: Text(
+                            model.comment.last.text,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 12),
+                          ),
                         ),
-                      ),
                       Text(
                         ' - ${model.time}',
                         style: TextStyle(fontSize: 12),

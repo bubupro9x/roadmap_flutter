@@ -1,25 +1,30 @@
 import 'dart:convert';
 
+import 'package:bloc_provider/bloc_provider.dart';
 import 'package:flutter/material.dart';
 
+import 'chat_bloc.dart';
 import 'main.dart';
 
-class NameDetails extends StatefulWidget {
+class ChatDetail extends StatefulWidget {
   final MessageModel model;
 
-  const NameDetails({Key key, this.model}) : super(key: key);
+  const ChatDetail({Key key, this.model}) : super(key: key);
 
   @override
-  _NameDetailsState createState() => _NameDetailsState();
+  _ChatDetailState createState() => _ChatDetailState();
 }
 
-class _NameDetailsState extends State<NameDetails> {
+class _ChatDetailState extends State<ChatDetail> {
   MessageModel model;
   bool isUserTyping = false;
   TextEditingController _controller = TextEditingController();
 
+  ChatBloc _bloc;
+
   @override
   void initState() {
+    _bloc = BlocProvider.of<ChatBloc>(context);
     model = widget.model;
     // TODO: implement initState
     super.initState();
@@ -106,7 +111,6 @@ class _NameDetailsState extends State<NameDetails> {
       ],
     );
   }
-
 
   _buildSend() {
     return GestureDetector(
