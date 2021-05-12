@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "969810398414",
+    "project_id": "contact-info-3c77a",
+    "storage_bucket": "contact-info-3c77a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969810398414:android:5ef1784687ae456949d49f",
+        "android_client_info": {
+          "package_name": "com.example.mess_clone_ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969810398414-ao5rqk7ml2487v448f8ph4tbrvvqh0so.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfynz62Gdtk8YOI4gY1CGO_cPN_2n-8nM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969810398414-ao5rqk7ml2487v448f8ph4tbrvvqh0so.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

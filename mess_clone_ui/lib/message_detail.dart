@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
 
 import 'main.dart';
 
@@ -109,18 +107,6 @@ class _NameDetailsState extends State<NameDetails> {
     );
   }
 
-  Future<String> _fetchMessage({String text}) async {
-    Response response = await http.post('https://wsapi.simsimi.com/190410/talk',
-        headers: {
-          "x-api-key": 'mWdCACNk9_UNrM2IN~eEATGVyBCEWMM6Y3r.WQ9c',
-          'Content-type': 'application/json'
-        },
-        body: json.encode({"utext": text, "lang": "vn"}));
-
-    print('response: ${response.body}');
-    AMessageModel model = aMessageModelFromJson(response.body);
-    return Future.value(model.atext);
-  }
 
   _buildSend() {
     return GestureDetector(
@@ -139,10 +125,6 @@ class _NameDetailsState extends State<NameDetails> {
               text: "Nó đang typing...",
               isMine: false,
             ));
-        setState(() {});
-        final aText =
-            await _fetchMessage(text: text); //aText co ket qua tra ve cua api
-        model.comment.first.text = aText;
         setState(() {});
       },
       child: Icon(
